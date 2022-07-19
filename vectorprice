@@ -1,0 +1,29 @@
+        #########DEFINIR LA CANTIDAD A COMPRAR EN ORDEN INVERSO
+        Grilla=grilla; c=9; valor = 0; i=0
+        ri=Grilla; 
+        cap=capitalinicial
+        Rango=[]
+        while i<180:
+            try:
+                valor = round(cap/(ri/c*Grilla),2)
+            except:
+                valor = round(cap*0.98,2)
+            #Crea un vector de referencia
+            Rango.append({'ot':i,'cap':cap,'rango':Grilla, 'valor':valor})
+            Grilla-=1
+            if Grilla<0:
+                i=200
+            else:
+                cap = round(cap-valor,2)
+            i+=1
+        j= 0
+        orders = client.get_open_orders(symbol=symbolTicker)
+
+        for i in Rango:
+            if Rango[j]['ot']==len(orders)//2:
+                valorcompra=Rango[j]['valor']
+            else:
+                valorcompra=Rango[-1]['valor']
+            j+=1
+        quantity = max(qmin, round((valorcompra / prev_symbolPrice),decimales+1)- ajuste)
+        quantity = round(quantity, decimales)
